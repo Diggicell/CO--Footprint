@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto" data-bs-theme="dark">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="CO2 Footprint Vergleich nach Ländern und Branchen">
+    <meta name="author" content="Niklas Steinmeier ">
+    <title>CO2 - Footprint Vergleich</title>
+
+    <!-- Content Security Policy (Sicherheitsmerkmal gemäß 4.4) -->
+    <meta http-equiv="Content-Security-Policy"
+          content="
+          default-src 'self' https://cdn.jsdelivr.net https://code.jquery.com;
+          script-src 'self' https://cdn.jsdelivr.net https://code.jquery.com 'unsafe-inline';
+          style-src 'self' https://cdn.jsdelivr.net 'unsafe-inline';
+          img-src 'self' data: https://placehold.co;
+          object-src 'none';
+          base-uri 'self';
+          form-action 'self';
+          frame-ancestors 'none';
+          ">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body data-bs-theme="dark">
+    <div class="container">
+
+      <!-- Navbar -->
+    <!-- Navbar -->
+<nav class="navbar navbar-expand-lg bg-body-tertiary rounded" aria-label="Navigation CO2-Webseite">
+  <div class="container-fluid">
+
+    <!-- Titel & Logo -->
+    <a class="navbar-brand" href="#">CO₂ Footprint</a>
+    <a class="navbar-brand" href="#">
+      <img src="img/logo.png" alt="Logo" height="36">
+    </a>
+
+    <!-- Toggle für mobile Geräte -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarsExample09" aria-controls="navbarsExample09"
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navigationslinks -->
+    <div class="collapse navbar-collapse" id="navbarsExample09">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Startseite</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">Ländervergleich</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">Unternehmensdaten</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">Emissionstabellen</a>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+            Analysen
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Branchenübersicht</a></li>
+            <li><a class="dropdown-item" href="#">CO₂-Trends nach Jahr</a></li>
+            <li><a class="dropdown-item" href="#">Top-10 Emittenten</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">Kontakt</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">Impressum</a>
+        </li>
+
+      </ul>
+
+      <!-- Suchfeld (mit Validierung) -->
+      <form role="search" id="searchForm" onsubmit="return false;">
+        <input class="form-control" id="searchField" type="search"
+               placeholder="Filter nach Attributen" aria-label="Search">
+      </form>
+    </div>
+  </div>
+</nav>
+      <!-- Navbar -->
+
+      <!-- Content -->
+      <div class="col-md-12">
+        <div id="table-sortable"></div>
+      </div>
+      <!-- Content -->
+
+      <!-- Footer -->
+      <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+        <p class="col-md-4 mb-0 text-body-secondary">© 2025 Co-Low-Two, Inc</p>
+
+        <a href="/" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+          <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+        </a>
+
+        <ul class="nav col-md-4 justify-content-end">
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Datenschutz</a></li>
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Impressum</a></li>
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Disclaimer</a></li>
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">DSGVO</a></li>
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">About</a></li>
+        </ul>
+      </footer>
+      <!-- Footer -->
+
+    </div>
+
+    <!-- JS Dependencies -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+            crossorigin="anonymous"></script>
+    <script charset="utf-8"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="js/table-sortable.js"></script>
+
+    <!-- Data and Logic -->
+    <script type="text/javascript">
+      // Sichere Datenstruktur (statisch, keine Benutzer-Eingaben)
+   var data = [
+  {
+    "country": "Deutschland",
+    "branch": "Land- und Forstwirtschaft",
+    "emission": 140000,
+    "year": 2020
+  },
+  {
+    "country": "Deutschland",
+    "branch": "Land- und Forstwirtschaft",
+    "emission": 130000,
+    "year": 2022
+  },
+  {
+    "country": "Deutschland",
+    "branch": "Fischerei",
+    "emission": 36000,
+    "year": 2020
+  },
+  {
+    "country": "Deutschland",
+    "branch": "Fischerei",
+    "emission": 32000,
+    "year": 2022
+  },
+  {
+    "country": "Deutschland",
+    "branch": "Bergbau und Gewinnung von Steinen und Erden",
+    "emission": 740000,
+    "year": 2020
+  },
+  {
+    "country": "Deutschland",
+    "branch": "Bergbau und Gewinnung von Steinen und Erden",
+    "emission": 780000,
+    "year": 2022
+  },
+  {
+    "country": "Deutschland",
+    "branch": "Verarbeitendes Gewerbe",
+    "emission": 7000000,
+    "year": 2020
+  },
+  {
+    "country": "Deutschland",
+    "branch": "Verarbeitendes Gewerbe",
+    "emission": 7200000,
+    "year": 2022
+  },
+  {
+    "country": "Deutschland",
+    "branch": "Energieversorgung",
+    "emission": 5700000,
+    "year": 2020
+  },
+  {
+    "country": "Deutschland",
+    "branch": "Energieversorgung",
+    "emission": 5900000,
+    "year": 2022
+  },
+  {
+    "country": "Deutschland",
+    "branch": "Wasserversorgung, Abwasser- und Abfallentsorgung",
+    "emission": 370000,
+    "year": 2020
+  },
+  {
+    "country": "Deutschland",
+    "branch": "Wasserversorgung, Abwasser- und Abfallentsorgung",
+    "emission": 390000,
+    "year": 2022
+  },
+  {
+    "country": "Deutschland",
+    "branch": "Baugewerbe",
+    "emission": 1400000,
+    "year": 2020
+  },
+  {
+    "country": "Deutschland",
+    "branch": "Baugewerbe",
+    "emission": 1500000,
+    "year": 2022
+  },
+  {
+    "country": "Deutschland",
+    "branch": "Dienstleistungsbereiche",
+    "emission": 2700000,
+    "year": 2020
+  },
+  {
+    "country": "Deutschland",
+    "branch": "Dienstleistungsbereiche",
+    "emission": 2800000,
+    "year": 2022
+  },
+  {
+    "country": "USA",
+    "branch": "Land- und Forstwirtschaft",
+    "emission": 160000,
+    "year": 2020
+  },
+  {
+    "country": "USA",
+    "branch": "Land- und Forstwirtschaft",
+    "emission": 150000,
+    "year": 2022
+  },
+  {
+    "country": "USA",
+    "branch": "Fischerei",
+    "emission": 33000,
+    "year": 2020
+  },
+  {
+    "country": "USA",
+    "branch": "Fischerei",
+    "emission": 31000,
+    "year": 2022
+  },
+  {
+    "country": "USA",
+    "branch": "Bergbau und Gewinnung von Steinen und Erden",
+    "emission": 770000,
+    "year": 2020
+  },
+  {
+    "country": "USA",
+    "branch": "Bergbau und Gewinnung von Steinen und Erden",
+    "emission": 790000,
+    "year": 2022
+  },
+  {
+    "country": "USA",
+    "branch": "Verarbeitendes Gewerbe",
+    "emission": 6800000,
+    "year": 2020
+  },
+  {
+    "country": "USA",
+    "branch": "Verarbeitendes Gewerbe",
+    "emission": 7000000,
+    "year": 2022
+  },
+  {
+    "country": "USA",
+    "branch": "Energieversorgung",
+    "emission": 5700000,
+    "year": 2020
+  },
+  {
+    "country": "USA",
+    "branch": "Energieversorgung",
+    "emission": 5900000,
+    "year": 2022
+  },
+  {
+    "country": "USA",
+    "branch": "Wasserversorgung, Abwasser- und Abfallentsorgung",
+    "emission": 370000,
+    "year": 2020
+  },
+  {
+    "country": "USA",
+    "branch": "Wasserversorgung, Abwasser- und Abfallentsorgung",
+    "emission": 390000,
+    "year": 2022
+  },
+  {
+    "country": "USA",
+    "branch": "Baugewerbe",
+    "emission": 1450000,
+    "year": 2020
+  },
+  {
+    "country": "USA",
+    "branch": "Baugewerbe",
+    "emission": 1550000,
+    "year": 2022
+  },
+  {
+    "country": "USA",
+    "branch": "Dienstleistungsbereiche",
+    "emission": 2700000,
+    "year": 2020
+  },
+  {
+    "country": "USA",
+    "branch": "Dienstleistungsbereiche",
+    "emission": 2800000,
+    "year": 2022
+  },
+  {
+    "country": "Indien",
+    "branch": "Land- und Forstwirtschaft",
+    "emission": 100000,
+    "year": 2020
+  },
+  {
+    "country": "Indien",
+    "branch": "Land- und Forstwirtschaft",
+    "emission": 90000,
+    "year": 2022
+  },
+  {
+    "country": "Indien",
+    "branch": "Fischerei",
+    "emission": 30000,
+    "year": 2020
+  },
+  {
+    "country": "Indien",
+    "branch": "Fischerei",
+    "emission": 28000,
+    "year": 2022
+  },
+  {
+    "country": "Indien",
+    "branch": "Bergbau und Gewinnung von Steinen und Erden",
+    "emission": 820000,
+    "year": 2020
+  },
+  {
+    "country": "Indien",
+    "branch": "Bergbau und Gewinnung von Steinen und Erden",
+    "emission": 850000,
+    "year": 2022
+  },
+  {
+    "country": "Indien",
+    "branch": "Verarbeitendes Gewerbe",
+    "emission": 6400000,
+    "year": 2020
+  },
+  {
+    "country": "Indien",
+    "branch": "Verarbeitendes Gewerbe",
+    "emission": 6600000,
+    "year": 2022
+  },
+  {
+    "country": "Indien",
+    "branch": "Energieversorgung",
+    "emission": 4700000,
+    "year": 2020
+  },
+  {
+    "country": "Indien",
+    "branch": "Energieversorgung",
+    "emission": 4900000,
+    "year": 2022
+  },
+  {
+    "country": "Indien",
+    "branch": "Wasserversorgung, Abwasser- und Abfallentsorgung",
+    "emission": 250000,
+    "year": 2020
+  },
+  {
+    "country": "Indien",
+    "branch": "Wasserversorgung, Abwasser- und Abfallentsorgung",
+    "emission": 260000,
+    "year": 2022
+  },
+  {
+    "country": "Indien",
+    "branch": "Baugewerbe",
+    "emission": 1100000,
+    "year": 2020
+  },
+  {
+    "country": "Indien",
+    "branch": "Baugewerbe",
+    "emission": 1150000,
+    "year": 2022
+  },
+  {
+    "country": "Indien",
+    "branch": "Dienstleistungsbereiche",
+    "emission": 1900000,
+    "year": 2020
+  },
+  {
+    "country": "Indien",
+    "branch": "Dienstleistungsbereiche",
+    "emission": 1950000,
+    "year": 2022
+  },
+  {
+    "country": "China",
+    "branch": "Land- und Forstwirtschaft",
+    "emission": 120000,
+    "year": 2020
+  },
+  {
+    "country": "China",
+    "branch": "Land- und Forstwirtschaft",
+    "emission": 110000,
+    "year": 2022
+  },
+  {
+    "country": "China",
+    "branch": "Fischerei",
+    "emission": 40000,
+    "year": 2020
+  },
+  {
+    "country": "China",
+    "branch": "Fischerei",
+    "emission": 38000,
+    "year": 2022
+  },
+  {
+    "country": "China",
+    "branch": "Bergbau und Gewinnung von Steinen und Erden",
+    "emission": 880000,
+    "year": 2020
+  },
+  {
+    "country": "China",
+    "branch": "Bergbau und Gewinnung von Steinen und Erden",
+    "emission": 900000,
+    "year": 2022
+  },
+  {
+    "country": "China",
+    "branch": "Verarbeitendes Gewerbe",
+    "emission": 7800000,
+    "year": 2020
+  },
+  {
+    "country": "China",
+    "branch": "Verarbeitendes Gewerbe",
+    "emission": 8000000,
+    "year": 2022
+  },
+  {
+    "country": "China",
+    "branch": "Energieversorgung",
+    "emission": 5500000,
+    "year": 2020
+  },
+  {
+    "country": "China",
+    "branch": "Energieversorgung",
+    "emission": 5700000,
+    "year": 2022
+  },
+  {
+    "country": "China",
+    "branch": "Wasserversorgung, Abwasser- und Abfallentsorgung",
+    "emission": 320000,
+    "year": 2020
+  },
+  {
+    "country": "China",
+    "branch": "Wasserversorgung, Abwasser- und Abfallentsorgung",
+    "emission": 330000,
+    "year": 2022
+  },
+  {
+    "country": "China",
+    "branch": "Baugewerbe",
+    "emission": 1300000,
+    "year": 2020
+  },
+  {
+    "country": "China",
+    "branch": "Baugewerbe",
+    "emission": 1350000,
+    "year": 2022
+  },
+  {
+    "country": "China",
+    "branch": "Dienstleistungsbereiche",
+    "emission": 2200000,
+    "year": 2020
+  },
+  {
+    "country": "China",
+    "branch": "Dienstleistungsbereiche",
+    "emission": 2250000,
+    "year": 2022
+  }
+];
+
+      var columns = {
+          country: 'Land',
+          branch: 'Wirtschaftszweig',
+          emission: 'CO² Emissionen',
+          year: 'Jahr',
+      };
+
+     
+      var table = $('#table-sortable').tableSortable({
+          data: data,
+          columns: columns,
+          rowsPerPage: 10,
+          pagination: true,
+          searchField: '#searchField'
+      });
+
+      /** 
+       * Sicherheitserweiterung:
+       * Clientseitige Eingabevalidierung für das Suchfeld
+       * Nur Buchstaben, Ziffern, Leerzeichen, Punkt und Komma sind erlaubt
+       */
+      document.getElementById('searchField').addEventListener('input', function (e) {
+        const regex = /^[a-zA-Z0-9äöüÄÖÜß.,\s-]*$/;
+        if (!regex.test(e.target.value)) {
+          // Ungültige Eingabe entfernen
+          e.target.value = e.target.value.replace(/[^a-zA-Z0-9äöüÄÖÜß.,\s-]/g, '');
+        }
+      });
+
+      // Beispiel: DOM-Manipulation nur über textContent (nicht innerHTML)
+      function safeOutput(targetId, text) {
+        const target = document.getElementById(targetId);
+        if (target) target.textContent = text;
+      }
+    
+    </script>
+    <script>
+          // Sprachprüfung für RTL-Ausrichtung
+          const locale = navigator.language || "en";
+          const rtlLangs = ["ar", "he", "fa", "ur"];
+          const isRTL = rtlLangs.some(lang => locale.startsWith(lang));
+
+          // Dokumentrichtung setzen
+          document.documentElement.setAttribute("dir", isRTL ? "rtl" : "ltr");
+
+          // Optional: Navigation spezifisch anpassen
+          const navbar = document.getElementById("navbarsExample09");
+          if (navbar) {
+            navbar.classList.toggle("rtl", isRTL);
+          }
+    </script>
+  </body>
+</html>
